@@ -17,8 +17,8 @@ SHEET = GSPREAD_CLIENT.open('rain_data')
 WORKSHEET_NAME = "sheet1"
 
 # The header row in the worksheet file.
-HEADERS = ["Year", "Month", "Rain_Volum(mm/h)",
-           "Area_m2", "Density", "Save_At"]
+HEADERS = ["year", "month", "rain_volume(mm/h)",
+           "area_m2", "density", "save_at"]
 
 
 @dataclass
@@ -27,8 +27,8 @@ class RainEntry:
     month: int
     rain_volume: float
     area_m2: float
-    density: float       
-    saved_at: str         
+    density: float    
+    save_at: str         
 
 
 def open_worksheet():
@@ -55,12 +55,11 @@ def append_entry(ws, entry):
                    entry.rain_volume,
                    entry.area_m2,
                    entry.density,
-                   entry.saved_at
+                   entry.save_at
                    ])
-    
-# Test append_entry function.
 
 
+""" Test append_entry function.
 if __name__ == "__main__":
     ws = open_worksheet()
     test_entry = RainEntry(
@@ -69,7 +68,46 @@ if __name__ == "__main__":
         rain_volume=42.5,
         area_m2=25,
         density=42.5 / 25,  # should be 1.7
-        saved_at="TEST_ENTRY"
+        save_at="TEST_ENTRY"
     )
     append_entry(ws, test_entry)
-    print("Test entry added to Google Sheet")
+    print("Test entry added to Google Sheet")"""
+
+
+def get_entries(ws):
+    """
+    Read all entries from the sheet (skrips header)
+    """
+    records = ws.get_all_values()[1:]  # To skip the header
+    entries = []
+
+    for row in records:
+        try:
+            year = int(row[0])
+            month = int(row[1])
+            rain_volume = float(row[2])
+            area = float(row[3])
+            density = float(row[4])
+            if len(row) > 5 and row[5].strip():
+                save_at = row[5].strip()
+            else:
+                save_at = "N/A"
+            entries.append(RainEntry(year, month, rain_volume,
+                                     area, density, save_at))
+        except (IndexError, ValueError):
+            continue
+
+    return entries
+
+# Test the get_entries() function
+
+
+if __name__ == "__main__":
+    ws = open_worksheet()
+    entries = get_entries(ws)
+
+    print("Entiers feched from google sheet")
+    if entries != []:
+        for e in entries:
+            print(e)
+
