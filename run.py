@@ -99,9 +99,8 @@ def get_entries(ws):
 
     return entries
 
-# Test the get_entries() function
 
-
+""" Test the get_entries() function
 if __name__ == "__main__":
     ws = open_worksheet()
     entries = get_entries(ws)
@@ -109,5 +108,65 @@ if __name__ == "__main__":
     print("Entiers feched from google sheet")
     if entries != []:
         for e in entries:
-            print(e)
+            print(e)"""
 
+
+def input_int(prompt):
+    """
+    Ask the user for an intger number,
+    keep retrying until get a valid input
+    """
+    while True:
+        try:
+            number = int(input(prompt))
+            return number
+        except ValueError:
+            print("Please enter a whole number ( like 2025)")
+        except Exception as e:
+            print(f"Unxpected error: {e}")
+
+
+def input_float(prompt):
+    """
+    Ask the user for a float number,
+    keep retrying until get a valid input
+    """
+    while True:
+        try:
+            number = float(input(prompt))
+            return number
+        except ValueError:
+            print("Please enter a decimal number ( like 15.005)")
+        except Exception as e:
+            print(f"Unxpected error: {e}")
+            return None
+
+
+def confirm(prompt):
+    """
+    Aska yes / no question
+    """
+    while True:
+        answer = input(prompt + "y/n: ").lower().strip()
+        if answer in ["y", "yes"]:
+            return True
+        elif answer in ["n", "no"]:
+            return False
+        else:
+            print("Please anwswer 'y' or 'n'")
+
+# Test code that only runs when this file is executed directly
+
+
+if __name__ == "__main__":
+    print("=== Testing Input Functions ===")
+    
+    print("\n1. Testing input_int:")
+    year = input_int("Enter what year this data collected : ")
+    print(f"Success! You entered: {year} (type: {type(year)})")
+    print("\n2. Testing input_float:")
+    area = input_float("Enter e: ")
+    print(f"Success! You entered: {area} (type: {type(area)})")
+    print("\n3. Testing confirm:")
+    save_file = confirm("Do you want to save 'y' or 'n'?")
+    print(f"You answered: {save_file}")
