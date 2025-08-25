@@ -246,7 +246,26 @@ def add_rainfall_record(ws):
         print("Entry discarded.\n")
 
 
-if __name__ == "__main__":
-    ws = open_worksheet()   # <-- this opens the Google Sheet safely
-    add_rainfall_record(ws)
+def calculator_only():
+    """
+    Simple rainfall density calculator.
+    Does NOT save results to Google Sheets.
+    Prompts for rain volume and area, then computes density.
+    """
+    rain_volume = input_float("Rain volume (mm/h): ")
+    if rain_volume is None:
+        return
+    
+    while True:
+        area = input_float("Area (m^2): ")
+        if area is None:
+            return
+        if area > 0:
+            break
+        print("Area must be greater than 0")
+    
+    density = compute_density(rain_volume, area)
+    print(f"Density = {density} mm/h per m^2\n")
 
+
+calculator_only()
