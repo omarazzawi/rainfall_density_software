@@ -196,9 +196,13 @@ def add_rainfall_record(ws):
     Arguments:
         ws (gspread.Worksheet): The Google Sheets worksheet to append to.
     """
-    year = input_int("Year (for exapmle 2022): ")
-    if year is None:
-        return
+    while True:
+        year = input_int("Year (e.g 2020) 4-digit: ")
+        if year is None:
+            return
+        if 1000 <= year <= 9999:   # must be exactly 4 digits
+            break
+        print("Year must be a 4-digit number (e.g. 2024)")
     
     # Month validation
     while True:
