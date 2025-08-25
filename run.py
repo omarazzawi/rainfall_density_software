@@ -155,10 +155,9 @@ def confirm(prompt):
         else:
             print("Please anwswer 'y' or 'n'")
 
-# Test code that only runs when this file is executed directly
-
-
-if __name__ == "__main__":
+    """
+    Test code that only runs when this file is executed directly
+    if __name__ == "__main__":
     print("=== Testing Input Functions ===")
     
     print("\n1. Testing input_int:")
@@ -169,4 +168,15 @@ if __name__ == "__main__":
     print(f"Success! You entered: {area} (type: {type(area)})")
     print("\n3. Testing confirm:")
     save_file = confirm("Do you want to save 'y' or 'n'?")
-    print(f"You answered: {save_file}")
+    print(f"You answered: {save_file}")"""
+
+
+def compute_density(rain_volume, area_m2):
+    """
+    Calculate the Rain density
+    """
+    return round(rain_volume / area_m2, 6)
+
+
+densty_test = compute_density(42.5, 25)
+print(densty_test)
