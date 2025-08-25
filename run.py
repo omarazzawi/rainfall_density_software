@@ -1,6 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from dataclasses import dataclass
+from datetime import datetime
 
 
 SCOPE = [
@@ -173,10 +174,75 @@ def confirm(prompt):
 
 def compute_density(rain_volume, area_m2):
     """
-    Calculate the Rain density
+    Compute the rainfall density.
+    Formula:
+        density = rain_volume / area_m2
+    Arguments:
+        rain_volume (float): Rainfall in mm/h
+        area_m2 (float): Surface area in square meters
+    Returns:
+        float: Rainfall density (mm/h per m²), rounded to 6 decimals.
     """
     return round(rain_volume / area_m2, 6)
 
 
-densty_test = compute_density(42.5, 25)
-print(densty_test)
+# The main data entry
+def add_rainfall_record(ws):
+    """
+    Collects input for a single rainfall record
+    (year, month, volume, area).
+    Computes density and saves the record
+    to Google Sheets if confirmed.
+    Arguments:
+        ws (gspread.Worksheet): The Google Sheets worksheet to append to.
+    """
+    year = input_int("Year (for exapmle 2022): ")
+    if year is None:
+        return
+    
+    # Month validation
+    while True:
+        month = input_int("Month (1 - 12): ")
+        if month is None:
+            return
+        if 1 <= month <= 12:
+            break
+        print(" Month must be between (1 and 12)")
+
+    rain_volume = input_float("Rain volume (mm/h): ")
+    if rain_volume is None:
+        return
+    
+    # Area Validation.
+    while True:
+        area = input_float("Area (m^2). ")
+        if area is None:
+            return
+        if area > 0:
+            break
+        print("Area must be greater than 0")
+
+    density = compute_density(rain_volume, area)
+    print(f"\n density = {density} mm/h per m^2")
+
+    # Confirmation before saving.
+    if confirm("Save this entry?"):
+        entry = RainEntry(
+            year=year,
+            month=month,
+            rain_volume=rain_volume,
+            area_m2=area,
+            density=density,
+            save_at=datetime.utcnow().isoformat()
+
+        )
+        append_entry(ws, entry)
+        print("Entry saved.\n")
+    else:
+        print("Entry discarded.\n")
+
+
+if __name__ == "__main__":
+    ws = open_worksheet()   # <-- this opens the Google Sheet safely
+    add_rainfall_record(ws)
+
