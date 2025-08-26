@@ -296,9 +296,48 @@ def show_entries(ws, limit=25):
     print("")
 
 
+def average_last_12_months(ws):
+    """
+    Find the average rainfall density for the last 12 months.
+    """
+    # Get all entries from the sheet
+    entries = get_entries(ws)
+    if not entries:
+        print("No entries found.\n")
+        return
+
+    # Sort all entries by year and month oldest to newset.
+    entries.sort(key=lambda e: (e.year, e.month))
+
+    # Go backwards and pick the last 12 different months
+    last12_entries = []
+    seen_months = set()
+
+    for entry in reversed(entries):
+        key = (entry.year, entry.month)
+        if key not in seen_months:  # avoid duplicates
+            seen_months.add(key)
+            last12_entries.append(entry)
+
+        if len(last12_entries) == 12:  # stop once we have 12 months
+            break
+
+    if not last12_entries:
+        print("Not enough data to calculate.\n")
+        return
+
+    # Calculate the average density
+    total_density = sum(entry.density for entry in last12_entries)
+    avg_density = total_density / len(last12_entries)
+
+    print(
+        f"Average density (last {len(last12_entries)} months): "
+        f"{round(avg_density, 6)} mm/h per m²\n"
+    )
+
+
 if __name__ == "__main__":
     ws = open_worksheet()
 
-    print("\n=== Testing show_entries ===")
-    show_entries(ws, limit=4)
-
+    print("=== Testing ====")
+    average_last_12_months(ws)
