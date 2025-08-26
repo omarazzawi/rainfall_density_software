@@ -84,11 +84,11 @@ def get_entries(ws):
 
     for row in records:
         try:
-            year = int(row[0])
-            month = int(row[1])
-            rain_volume = float(row[2])
-            area = float(row[3])
-            density = float(row[4])
+            year = int(row[0].strip())
+            month = int(row[1].strip())
+            rain_volume = float(row[2].strip().replace(",", "."))
+            area = float(row[3].strip().replace(",", "."))
+            density = float(row[4].strip().replace(",", "."))
             if len(row) > 5 and row[5].strip():
                 save_at = row[5].strip()
             else:
@@ -268,4 +268,37 @@ def calculator_only():
     print(f"Density = {density} mm/h per m^2\n")
 
 
-calculator_only()
+def show_entries(ws, limit=25):
+    """
+    Show rainfall records from the worksheet.
+    limit (int): How many entries to show (default 25).
+    """
+    entries = get_entries(ws)
+    if not entries:
+        print("No entries found.\n")
+        return
+
+    print(f"\nShowing up to {limit} records:")
+    count = 0
+    for entry in entries:
+        # Stop if we already showed 'limit' entries
+        if count >= limit:
+            break
+        print(
+            f"Year: {entry.year}, "
+            f"Month: {entry.month}, "
+            f"Rain Volume: {entry.rain_volume} mm/h, "
+            f"Area: {entry.area_m2} m², "
+            f"Density: {entry.density}, "
+            f"Saved at: {entry.save_at}"
+        )
+        count += 1
+    print("")
+
+
+if __name__ == "__main__":
+    ws = open_worksheet()
+
+    print("\n=== Testing show_entries ===")
+    show_entries(ws, limit=4)
+
