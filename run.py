@@ -124,7 +124,7 @@ def confirm(prompt):
     Aska yes / no question
     """
     while True:
-        answer = input(prompt + "y/n: ").lower().strip()
+        answer = input(prompt + "y/n: \n").lower().strip()
         if answer in ["y", "yes"]:
             return True
         elif answer in ["n", "no"]:
@@ -157,7 +157,7 @@ def add_rainfall_record(ws):
         ws (gspread.Worksheet): The Google Sheets worksheet to append to.
     """
     while True:
-        year = input_int("Year (e.g 2020) 4-digit: ")
+        year = input_int("Year (e.g 2020) 4-digit: \n")
         if year is None:
             return
         if 1000 <= year <= 9999:   # must be exactly 4 digits
@@ -166,20 +166,20 @@ def add_rainfall_record(ws):
     
     # Month validation
     while True:
-        month = input_int("Month (1 - 12): ")
+        month = input_int("Month (1 - 12):\n")
         if month is None:
             return
         if 1 <= month <= 12:
             break
         print(" Month must be between (1 and 12)")
 
-    rain_volume = input_float("Rain volume (mm/h): ")
+    rain_volume = input_float("Rain volume (mm/h):\n")
     if rain_volume is None:
         return
     
     # Area Validation.
     while True:
-        area = input_float("Area (m^2). ")
+        area = input_float("Area (m^2).\n")
         if area is None:
             return
         if area > 0:
@@ -212,12 +212,12 @@ def calculator_only():
     Does NOT save results to Google Sheets.
     Prompts for rain volume and area, then computes density.
     """
-    rain_volume = input_float("Rain volume (mm/h): ")
+    rain_volume = input_float("Rain volume (mm/h):\n")
     if rain_volume is None:
         return
     
     while True:
-        area = input_float("Area (m^2): ")
+        area = input_float("Area (m^2):\n")
         if area is None:
             return
         if area > 0:
