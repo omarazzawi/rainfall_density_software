@@ -293,7 +293,7 @@ def average_last_12_months(ws):
     print(
         f"Average density (last {len(last12_entries)} months): "
         f"{round(avg_density, 6)} mm/h per m^2\n"
-    )a
+    )
 
 
 def export_csv_hint(ws):
