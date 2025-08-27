@@ -322,7 +322,7 @@ def average_last_12_months(ws):
         if len(last12_entries) == 12:  # stop once we have 12 months
             break
 
-    if not last12_entries:
+    if len(last12_entries) < 12:
         print("Not enough data to calculate.\n")
         return
 
