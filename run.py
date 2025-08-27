@@ -1,4 +1,6 @@
 import gspread
+import sys
+import time
 from google.oauth2.service_account import Credentials
 from dataclasses import dataclass
 from datetime import datetime
@@ -60,21 +62,6 @@ def append_entry(ws, entry):
                    ])
 
 
-""" Test append_entry function.
-if __name__ == "__main__":
-    ws = open_worksheet()
-    test_entry = RainEntry(
-        year=2024,
-        month=1,
-        rain_volume=42.5,
-        area_m2=25,
-        density=42.5 / 25,  # should be 1.7
-        save_at="TEST_ENTRY"
-    )
-    append_entry(ws, test_entry)
-    print("Test entry added to Google Sheet")"""
-
-
 def get_entries(ws):
     """
     Read all entries from the sheet (skrips header)
@@ -99,17 +86,6 @@ def get_entries(ws):
             continue
 
     return entries
-
-
-""" Test the get_entries() function
-if __name__ == "__main__":
-    ws = open_worksheet()
-    entries = get_entries(ws)
-
-    print("Entiers feched from google sheet")
-    if entries != []:
-        for e in entries:
-            print(e)"""
 
 
 def input_int(prompt):
@@ -155,22 +131,6 @@ def confirm(prompt):
             return False
         else:
             print("Please anwswer 'y' or 'n'")
-
-    """
-    Test code that only runs when this file is executed directly
-    if __name__ == "__main__":
-    print("=== Testing Input Functions ===")
-    
-    print("\n1. Testing input_int:")
-    year = input_int("Enter what year this data collected : ")
-    print(f"Success! You entered: {year} (type: {type(year)})")
-    print("\n2. Testing input_float:")
-    area = input_float("Enter e: ")
-    print(f"Success! You entered: {area} (type: {type(area)})")
-    print("\n3. Testing confirm:")
-    save_file = confirm("Do you want to save 'y' or 'n'?")
-    print(f"You answered: {save_file}")"""
-
 
 def compute_density(rain_volume, area_m2):
     """
@@ -333,11 +293,62 @@ def average_last_12_months(ws):
     print(
         f"Average density (last {len(last12_entries)} months): "
         f"{round(avg_density, 6)} mm/h per m^2\n"
-    )
+    )a
+
+
+def export_csv_hint(ws):
+    """Print manual instructions to export Google Sheet as CSV."""
+    print("To export CSV: In Google Sheets, go to File → Download → CSV.\n")
+
+
+def main():
+    """
+    The main menu of the Rain Density program.
+    This is where the program starts running.
+    """
+    try:
+        ws = open_worksheet()
+    except Exception as e:
+        # If something goes wrong (e.g. no internet, wrong credentials),
+        # show a friendly error message instead of a crash.
+        print("Could not open Google Sheet.")
+        print("Please check your credentials file and sharing settings.")
+        print(f"Details: {e}")
+
+        # sys.exit(1) = stop the program with error code 1
+        # (0 means OK, 1 means error)
+        sys.exit(1)
+
+    while True:
+        print("\n=== Rain Density Menu ===")
+        print("1) Add monthly entry (compute & save)")
+        print("2) Density calculator (no save)")
+        print("3) Show past entries")
+        print("4) Show 12-month average density")
+        print("5) Export help (CSV)")
+        print("0) Exit")
+        
+        choice = input("Choose an option: ").strip()
+
+        # --- Step 3: Handle each menu choice ---
+        if choice == "1":
+            add_rainfall_record(ws)   
+        elif choice == "2":
+            calculator_only()   
+        elif choice == "3":
+            show_entries(ws)    
+        elif choice == "4":
+            average_last_12_months(ws)  
+        elif choice == "5":
+            export_csv_hint(ws)   
+        elif choice == "0":
+            print("Goodbye!")
+            time.sleep(0.3)  # small pause before quitting
+            break
+        else:
+            print("Invalid choice. Please pick 0 - 5.\n")
 
 
 if __name__ == "__main__":
-    ws = open_worksheet()
+    main()
 
-    print("=== Testing ====")
-    average_last_12_months(ws)
