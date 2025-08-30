@@ -337,10 +337,6 @@ def main():
         print("0) Exit \n")
         
         choice = input("Choose an option: \n").strip()
-        if choice == "0":
-            print("\nGoodbye!")
-            print("copyright © omaralazzawi 2025\n")
-        break
 
     # --- Step 3: Handle each menu choice --- 
         if choice == "1":
@@ -354,7 +350,8 @@ def main():
         elif choice == "5":
             export_csv_hint(ws)   
         elif choice == "0":
-            print("Goodbye!")
+            print("\nGoodbye!")
+            print("copyright © omaralazzawi 2025\n")
             time.sleep(0.3)  # small pause before quitting
             break
         else:
