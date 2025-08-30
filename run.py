@@ -132,6 +132,7 @@ def confirm(prompt):
         else:
             print("Please anwswer 'y' or 'n'")
 
+
 def compute_density(rain_volume, area_m2):
     """
     Compute the rainfall density.
@@ -320,17 +321,28 @@ def main():
         sys.exit(1)
 
     while True:
-        print("\n=== Rain Density Menu ===")
+        print("\n=== Rain Density Menu ===\n")
+        print("This beginner-friendly script records monthly rainfall data and")
+        print("computes rain density using the formula:\n")
+        print("    D = V / A\n")
+        print("Where:")
+        print("    D = density (mm/h per m²)")
+        print("    V = rainfall volume (mm/h for the month)")
+        print("    A = catchment area (square meters)\n")
         print("1) Add monthly entry (compute & save)")
         print("2) Density calculator (no save)")
         print("3) Show past entries")
         print("4) Show 12-month average density")
         print("5) Export help (CSV)")
-        print("0) Exit")
+        print("0) Exit \n")
         
-        choice = input("Choose an option: ").strip()
+        choice = input("Choose an option: \n").strip()
+        if choice == "0":
+            print("\nGoodbye!")
+            print("copyright © omaralazzawi 2025\n")
+        break
 
-        # --- Step 3: Handle each menu choice ---
+    # --- Step 3: Handle each menu choice --- 
         if choice == "1":
             add_rainfall_record(ws)   
         elif choice == "2":
@@ -351,4 +363,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
