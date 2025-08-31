@@ -20,20 +20,31 @@
   * The program seamlessly handles the connection, creation, and population of your Google Sheet. It even provides a helpful hint on how to export your data as a CSV file for further analysis.
   
 
-##  How to use the app.
-![Main Menu Options](/images/rainfullDensityMenu.png)
+##  How to use the app.  
+   
+  This application is a Rain Density Calculator that stores data in Google Sheets. It lets you log rainfall data, calculate density, and analyze trends over time.  
+### 1. **Startup**  
+   
+     * When the program runs, it connects to a Google Sheet called rain_data.
+     * If the worksheet (sheet1) doesn’t exist, it creates one automatically.
+     * A header row is prepared with these columns:  
+        - year | month | rain_volume(mm/h) | area_m2 | density | save_at.
 
-Very smpile frindly use a Main Menu Options.
-
+### 2. **Main Menu**   
+   
+  ![Main Menu Options](/images/rainfullDensityMenu.png)  
+  
+### 3. **Menu Options**
+   
 === Rain Density Menu ===
 1) Add monthly entry (compute & save)
 2) Density calculator (no save)
 3) Show past entries
 4) Show 12-month average density
 5) Export help (CSV)
-0) Exit
+6) Exit
 
-#### Option 1: Add monthly entry
+ #### Option 1: Add monthly entry
 
     Enter year, month, rainfall volume (mm/h), and area (m²).
 
@@ -59,7 +70,15 @@ Very smpile frindly use a Main Menu Options.
 
 #### Option 0: Exit
 
-    Quit the program.
+    Quit the program.  
+    
+### 4. **Error Handling**
+
+  *  If credentials are missing/invalid or internet is down → the program exits with a friendly error message.
+  *  Invalid inputs (non-numbers, out of range values) trigger a retry until valid data is entered.  
+  *  Invalid menu choices print an error and return to the menu.
+ 
+ 
 
 
 ## Future Features.
@@ -75,8 +94,8 @@ This project is designed to be extendable. Possible future improvements include:
 - **Enhanced Frontend Experience**
     * Improve the user interface with a more intuitive and visually appealing dashboar.  
   
-## Program sturcture digram  
-   ![Program sturcture digram ](/images/rainDensityDiagram.png)
+## Program sturcture diagram  
+   ![Program sturcture digram ](/images/rainDensityDiagram.png)  
 
 
 ## Testing  
@@ -88,7 +107,29 @@ This project is designed to be extendable. Possible future improvements include:
        |     FireFox   |   Windows 11     |    Very good       |
 
 
-* 
+* ### Manual Testing.  
+   
+
+
+| Feature Tested                                 | Test Input                                  | Expected Result                                               | Actual Result                                        | Pass/Fail |
+| ---------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------- | --------- |
+| **Add monthly entry**                          | Year: 2025, Month: 5, Volume: 120, Area: 40 | Entry saved in Google Sheets, density = 3.0 mm/h per m²       | Entry saved correctly, density displayed as expected | ✅ Pass    |
+| **Add monthly entry (invalid year)**           | Year: `abcd`                                | Error message shown, retry prompt                             | Error handled, program requested correct input       | ✅ Pass    |
+| **Add monthly entry (invalid month)**          | Month: 15                                   | Error message shown, retry prompt                             | Error handled, program requested correct month       | ✅ Pass    |
+| **Add monthly entry (invalid area)**           | Area: -20                                   | Error message shown, retry prompt                             | Error handled, program requested valid area          | ✅ Pass    |
+| **Density calculator**                         | Volume: 100, Area: 50                       | Density = 2.0 mm/h per m², no save to sheet                   | Correct density displayed, nothing saved             | ✅ Pass    |
+| **Show past entries**                          | Select option 3                             | Display last entries from Google Sheets                       | Correct entries shown                                | ✅ Pass    |
+| **12-month average density**                   | Select option 4 (with ≥12 entries in sheet) | Average density displayed correctly                           | Correct result displayed                             | ✅ Pass    |
+| **12-month average density (not enough data)** | Select option 4 (with <12 entries)          | Message: "Not enough data to calculate."                      | Correct message displayed                            | ✅ Pass    |
+| **Export help**                                | Select option 5                             | Instructions to download CSV shown                            | Instructions displayed correctly                     | ✅ Pass    |
+| **Exit program**                               | Select option 0                             | Program exits with goodbye message                            | Program exited, copyright message shown              | ✅ Pass    |
+| **Heroku deployment**                          | Run app via Heroku URL                      | Program loads, menu visible, all functions work same as local | Application works correctly on Heroku                | ✅ Pass    |
+
+     
+
+
+
+
 * ### Bug Fixes
   *  First bug, I forgot to put the *creds.json* inside the *.gitignore* will led to GitHub blocked the push, I tried to remove the credentials file from Git’s history using the the command:
       * git rm --cached creds.json
@@ -111,16 +152,57 @@ This project is designed to be extendable. Possible future improvements include:
 * ### Validation Testing
   * **PEP8 :** No errors founded.  
   
-  * ![PEP8 Python Validator](/images/pythonValidator.png)
+     ![PEP8 Python Validator](/images/pythonValidator.png)
   
 
 
 
-## Deployment
+## Deployment  
+This project is deployed using Heroku with GitHub integration.
 
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-- [rainfall-density-software](https://rainfall-density-software-7020b1171ad7.herokuapp.com/)
-- [Google worksheet / rain_data](https://docs.google.com/spreadsheets/d/13GlGRDWNzIjLu406VNskZgQTsLugodR5KFMti6b02GE/edit?usp=sharing) The worksheet link.
+1. Prerequisites  
+   * A Herok account. 
+   * A linked GitHub repository containing this project.
+   * creds.json (Google Service Account credentials) already added securely as Config Vars (not uploaded to the repo).  
+  
+2. Connect GitHub to Heroku.  
+   * Log in to my Heroku Dashboard
+   * Click New → Create new app.
+   * Choose a unique App name and your region, then click Create app.
+   * Search for your repository *(rainfall_density_software)* and click Connect.  
+
+3. Set Config Vars  
+   This project requires authentication for Google Sheets via service account credentials.
+   Instead of uploading creds.json directly, you must add its content as an environment variable:  
+   * Go to your Heroku app → Settings → Config Vars.
+   * Click Reveal Config Vars.  
+      * Keys: CREDS , PORT
+      * Values: creds.json information, 4- digit number  
+
+4. Add Buildpacks
+   * Navigate to Settings → Buildpacks.
+   * Add the following buildpacks in order:
+      * heroku/python
+      * heroku/nodejs  
+  
+5. Deploy the App  
+   * In the Deploy tab, I selected the branch I wanted to deploy (main).  
+   * Clicked Deploy Branch.  
+   * I Waited until the build finishes successfully.  
+   * Click Open App to launch your deployed application.  
+   * 
+6. Enable Automatic Deploys  
+   *  In the Deploy tab, enable Automatic deploys from GitHub.
+   *  This ensures every push to my GitHub repository, will automatically trigger a new Heroku build.
+
+
+- 🌐 **Live App on Heroku:** [rainfall-density-software](https://rainfall-density-software-7020b1171ad7.herokuapp.com/) 
+- 📊 **Sample Data on Google Sheets:** [Google worksheet / rain_data](https://docs.google.com/spreadsheets/d/13GlGRDWNzIjLu406VNskZgQTsLugodR5KFMti6b02GE/edit?usp=sharing) The worksheet link.
+
+
+
+
+
 
 ## Credits.
 - [Love Sandwiches project](https://github.com/Code-Institute-Solutions/love-sandwiches-p5-sourcecode), the core structure of project, IDE configuration, Python virtual environment setup, API integration, and Heroku deployment 
