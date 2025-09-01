@@ -1,8 +1,13 @@
-# Rainfall density software
-![rainfall_density_software]()
+# Rainfall density software  
+  ![rainfallDensitySoftware](/images/rainfallDensitySoftware.png)  
+  🌐 **Live App on Heroku:** [rainfall-density-software](https://rainfall-density-software-7020b1171ad7.herokuapp.com/)  
+   📊 **Sample Data on Google Sheets:** [Google worksheet / rain_data](https://docs.google.com/spreadsheets/d/13GlGRDWNzIjLu406VNskZgQTsLugodR5KFMti6b02GE/edit?usp=sharing)  
+   
+
+
 
 ## Introduction
-**The Rain Density Calculator** is a Python-based application built for engineers, hydrologists, and water resource professionals to record, calculate, and analyze rainfall density across defined surface areas. By integrating directly with Google Sheets as its database, the tool enables users to easily log, review, and process rainfall data. It offers a simple yet effective solution for managing rainfall density records and tracking changes over time.
+**The Rain Density Software** is a Python-based application built for engineers, hydrologists, and water resource professionals to record, calculate, and analyze rainfall density across defined surface areas. By integrating directly with Google Sheets as its database, the tool enables users to easily log, review, and process rainfall data. It offers a simple yet effective solution for managing rainfall density records and tracking changes over time.
 
 ## Features
 

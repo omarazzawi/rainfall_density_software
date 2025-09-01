@@ -30,8 +30,8 @@ class RainEntry:
     month: int
     rain_volume: float
     area_m2: float
-    density: float    
-    save_at: str         
+    density: float
+    save_at: str
 
 
 def open_worksheet():
@@ -54,7 +54,7 @@ def append_entry(ws, entry):
     Append a single entry to the worksheet.
     """
     ws.append_row([entry.year,
-                   entry.month, 
+                   entry.month,
                    entry.rain_volume,
                    entry.area_m2,
                    entry.density,
@@ -164,7 +164,6 @@ def add_rainfall_record(ws):
         if 1000 <= year <= 9999:   # must be exactly 4 digits
             break
         print("Year must be a 4-digit number (e.g. 2024)")
-    
     # Month validation
     while True:
         month = input_int("Month (1 - 12):\n")
@@ -177,7 +176,6 @@ def add_rainfall_record(ws):
     rain_volume = input_float("Rain volume (mm/h):\n")
     if rain_volume is None:
         return
-    
     # Area Validation.
     while True:
         area = input_float("Area (m^2).\n")
@@ -216,7 +214,6 @@ def calculator_only():
     rain_volume = input_float("Rain volume (mm/h):\n")
     if rain_volume is None:
         return
-    
     while True:
         area = input_float("Area (m^2):\n")
         if area is None:
@@ -224,7 +221,6 @@ def calculator_only():
         if area > 0:
             break
         print("Area must be greater than 0")
-    
     density = compute_density(rain_volume, area)
     print(f"Density = {density} mm/h per m^2\n")
 
@@ -321,8 +317,8 @@ def main():
         sys.exit(1)
 
     while True:
-        print("\n=== Rain Density Menu ===\n")
-        print("Units:")
+        print(" \n=== Rain Density Menu ===\n")
+        print(" Units:")
         print("    D = density in (mm/h per m²)")
         print("    V = rainfall volume in (mm/h for the month)")
         print("    A = catchment area in (square meters)\n")
@@ -332,20 +328,19 @@ def main():
         print(" 4) Show 12-month average density")
         print(" 5) Export help (CSV)")
         print(" 0) Exit \n")
-        
-        choice = input("Choose an option: \n").strip()
+        choice = input(" Choose an option: \n ").strip()
 
-    # --- Step 3: Handle each menu choice --- 
+    # --- Step 3: Handle each menu choice ---
         if choice == "1":
-            add_rainfall_record(ws)   
+            add_rainfall_record(ws)
         elif choice == "2":
-            calculator_only()   
+            calculator_only()
         elif choice == "3":
-            show_entries(ws)    
+            show_entries(ws)
         elif choice == "4":
-            average_last_12_months(ws)  
+            average_last_12_months(ws)
         elif choice == "5":
-            export_csv_hint(ws)   
+            export_csv_hint(ws)
         elif choice == "0":
             print("\nGoodbye!")
             print("copyright © omaralazzawi 2025\n")
